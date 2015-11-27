@@ -33,6 +33,8 @@ msiexec /i python.msi /quiet
      ( "C:\C:\Python27", $env:Path, [System.EnvironmentVariableTarget]::Machine )
 [Environment]::SetEnvironmentVariable
     ( "C :\Python27\Scripts", $env:Path, [System.EnvironmentVariableTarget]::Machine )
+[Environment]::SetEnvironmentVariable
+    ( "C :\Python27\Lib\site-packages", $env:Path, [System.EnvironmentVariableTarget]::Machine )
 
 
 # Installing git
