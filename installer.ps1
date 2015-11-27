@@ -56,8 +56,8 @@ powershell -Command "(New-Object Net.WebClient).DownloadFile('https://download.s
 choco install 7zip.commandline -y
 7z e sync.zip
 New-Item -ItemType Directory -Force -Path C:\Sync
-# copy sync.exr to C:\Sync
-xcopy /s sync.exe C:\Sync /y
+# copy sync.exe to C:\Sync
+xcopy /s sync.exe C:\Sync /Y
 
 # Modify system environment variable #
 [Environment]::SetEnvironmentVariable
