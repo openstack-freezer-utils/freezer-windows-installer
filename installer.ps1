@@ -1,6 +1,10 @@
-# Get username and password
 echo "Freezer windows installer v0.1"
+
+## Get username and password
+# Get domain\username
 $pc_name = whoami
+
+# Get Administrator password
 $password = Read-Host 'Administrator password is required to install freezer-scheduler as a windows service, please type in your password' -AsSecureString
 $password_check = Read-Host 'Please type your password again' -AsSecureString
 
@@ -18,6 +22,7 @@ If (-Not($plain_password -eq $plain_password_check))
   }
 
 # Installing chocolate
+# Install chocolatey will manage most of the dependencies for us
 iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))
 
 # Installing python
@@ -44,13 +49,19 @@ pip install -r C:\freezer\requirements.txt
 python setup.py install
 git clone https://github.com/memogarcia/freezer-windows-binaries C:\Python27\Lib\site-packages\freezer\bin
 
-# Installing sync
+## Installing sync
+# Sync is required to flush data from memory to disk
+# and we need to install 7zip to unzip sync
 powershell -Command "(New-Object Net.WebClient).DownloadFile('https://download.sysinternals.com/files/Sync.zip', 'sync.zip')"
 choco install 7zip.commandline -y
 7z e sync.zip
 New-Item -ItemType Directory -Force -Path C:\Sync
+# copy sync.exr to C:\Sync
 xcopy /s sync.exe C:\Sync /y
-setx PATH "%PATH%;c:\Sync" /m
+
+# Modify system environment variable #
+[Environment]::SetEnvironmentVariable
+     ( "C:\Sync", $env:Path, [System.EnvironmentVariableTarget]::Machine )
 
 # Installing freezer-scheduler
 Set-Location -Path C:\Python27\Lib\site-packages\freezer\scheduler
