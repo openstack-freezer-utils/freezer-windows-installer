@@ -35,7 +35,7 @@ $pythonPath=$originalPath+’;C:\Python27;C:\Python27\Scripts;C:\Python27\Lib\si
 Set-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment' -Name PATH –Value $pythonPath
 
 # Installing git
-choco install choco install git.install -y
+choco install git.install -y
 $originalPath=(Get-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment' -Name PATH).Path
 $gitPath=$originalPath+’;C:\Program Files\Git\bin’
 Set-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment' -Name PATH –Value $pythonPath
