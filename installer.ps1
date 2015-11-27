@@ -54,7 +54,8 @@ git clone https://github.com/memogarcia/freezer-windows-binaries C:\Python27\Lib
 # and we need to install 7zip to unzip sync
 powershell -Command "(New-Object Net.WebClient).DownloadFile('https://download.sysinternals.com/files/Sync.zip', 'sync.zip')"
 choco install 7zip.commandline -y
-7z e sync.zip
+# 7zip has to be between quotes to prevent older powershell terminals to break
+"7z e sync.zip"
 New-Item -ItemType Directory -Force -Path C:\Sync
 # copy sync.exe to C:\Sync
 xcopy /s sync.exe C:\Sync /Y
