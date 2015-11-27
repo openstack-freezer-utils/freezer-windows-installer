@@ -26,7 +26,14 @@ If (-Not($plain_password -eq $plain_password_check))
 iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))
 
 # Installing python
-choco install python2 -y
+powershell -Command "(New-Object Net.WebClient).DownloadFile('https://www.python.org/ftp/python/2.7.11/python-2.7.11rc1.msi', 'python.msi')"
+msiexec /i python.msi /quiet
+# Modify system environment variable
+[Environment]::SetEnvironmentVariable
+     ( "C:\C:\Python27", $env:Path, [System.EnvironmentVariableTarget]::Machine )
+[Environment]::SetEnvironmentVariable
+    ( "C :\Python27\Scripts", $env:Path, [System.EnvironmentVariableTarget]::Machine )
+
 
 # Installing git
 choco install git -y
@@ -60,7 +67,7 @@ New-Item -ItemType Directory -Force -Path C:\Sync
 # copy sync.exe to C:\Sync
 xcopy /s sync.exe C:\Sync /Y
 
-# Modify system environment variable #
+# Modify system environment variable
 [Environment]::SetEnvironmentVariable
      ( "C:\Sync", $env:Path, [System.EnvironmentVariableTarget]::Machine )
 
