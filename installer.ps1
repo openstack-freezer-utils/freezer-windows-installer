@@ -35,15 +35,19 @@ $pythonPath=$originalPath+’;C:\Python27;C:\Python27\Scripts;C:\Python27\Lib\si
 Set-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment' -Name PATH –Value $pythonPath
 
 # Installing git
-choco install git.install -y
-$originalPath=(Get-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment' -Name PATH).Path
-$gitPath=$originalPath+’;C:\Program Files\Git\bin’
-Set-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment' -Name PATH –Value $pythonPath
+choco install git.install -yfd
+$env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
+
 
 # Installing openssl
 choco install openssl.light -y
+$originalPath=(Get-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment' -Name PATH).Path
+$openSSLPath=$originalPath+’;C:\Program Files\OpenSSL\bin’
+Set-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment' -Name PATH –Value $openSSLPath
+
 
 # Installing pywin32
+powershell -Command "(New-Object Net.WebClient).DownloadFile('http://downloads.sourceforge.net/project/pywin32/pywin32/Build%20219/pywin32-219.win32-py2.7.exe', 'pywin32-219.win32-py2.7.exe')"
 # easy_install http://downloads.sourceforge.net/project/pywin32/pywin32/Build%20219/pywin32-219.win32-py2.7.exe
 
 # Installing Microsoft Visual C++ Compiler for Python 2.7
@@ -64,7 +68,7 @@ git clone https://github.com/memogarcia/freezer-windows-binaries C:\Python27\Lib
 powershell -Command "(New-Object Net.WebClient).DownloadFile('https://download.sysinternals.com/files/Sync.zip', 'sync.zip')"
 choco install 7zip.commandline -y
 # 7zip has to be between quotes to prevent older powershell terminals to break
-"7z e sync.zip"
+cmd /c 7z e sync.zip
 New-Item -ItemType Directory -Force -Path C:\Sync
 # copy sync.exe to C:\Sync
 xcopy /s sync.exe C:\Sync /Y
