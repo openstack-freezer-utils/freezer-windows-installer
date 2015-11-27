@@ -38,7 +38,9 @@ msiexec /i python.msi /quiet
 
 
 # Installing git
-choco install git -y
+choco install choco install git.install -y
+[Environment]::SetEnvironmentVariable
+    ( "C:\Program Files\Git\bin", $env:Path, [System.EnvironmentVariableTarget]::Machine )
 
 # Installing openssl
 choco install openssl.light -y
