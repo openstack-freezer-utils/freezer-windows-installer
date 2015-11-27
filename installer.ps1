@@ -18,7 +18,7 @@ If (-Not($plain_password -eq $plain_password_check))
   }
 
 # Installing chocolate
-@powershell -NoProfile -ExecutionPolicy Bypass -Command "iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))" && SET PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin
+iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))
 
 # Installing python
 choco install python2 -y
@@ -38,7 +38,8 @@ msiexec /i compiler.msi /quiet
 
 # Installing freezer
 git clone https://github.com/openstack/freezer.git C:\freezer
-cd C:\freezer
+Set-Location -Path C:\freezer
+git pull origin master
 pip install -r C:\freezer\requirements.txt
 python setup.py install
 git clone https://github.com/memogarcia/freezer-windows-binaries C:\Python27\Lib\site-packages\freezer\bin
@@ -47,7 +48,7 @@ git clone https://github.com/memogarcia/freezer-windows-binaries C:\Python27\Lib
 powershell -Command "(New-Object Net.WebClient).DownloadFile('https://download.sysinternals.com/files/Sync.zip', 'sync.zip')"
 choco install 7zip.commandline -y
 7z e sync.zip
-if not exist "C:\Sync" mkdir C:\Sync
+New-Item -ItemType Directory -Force -Path C:\Sync
 xcopy /s sync.exe C:\Sync /y
 setx PATH "%PATH%;c:\Sync" /m
 

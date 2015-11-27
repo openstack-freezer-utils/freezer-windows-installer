@@ -1,7 +1,7 @@
 Windows freezer installer
 =====================
 
-This installation script provides all the requirements to run freezer on windows.
+This installation script provides all the requirements to run freezer on windows::
 
     git clone https://github.com/memogarcia/freezer-installer
     cd freezer-installer
