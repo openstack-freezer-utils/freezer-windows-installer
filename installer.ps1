@@ -29,24 +29,22 @@ iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.p
 powershell -Command "(New-Object Net.WebClient).DownloadFile('https://www.python.org/ftp/python/2.7.11/python-2.7.11rc1.msi', 'python.msi')"
 msiexec /i python.msi /quiet
 # Modify system environment variable
-[Environment]::SetEnvironmentVariable
-     ( "C:\C:\Python27", $env:Path, [System.EnvironmentVariableTarget]::Machine )
-[Environment]::SetEnvironmentVariable
-    ( "C :\Python27\Scripts", $env:Path, [System.EnvironmentVariableTarget]::Machine )
-[Environment]::SetEnvironmentVariable
-    ( "C :\Python27\Lib\site-packages", $env:Path, [System.EnvironmentVariableTarget]::Machine )
-
+# Get original path
+$originalPath=(Get-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment' -Name PATH).Path
+$pythonPath=$originalPath+’;C:\Python27;C:\Python27\Scripts;C:\Python27\Lib\site-packages’
+Set-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment' -Name PATH –Value $pythonPath
 
 # Installing git
 choco install choco install git.install -y
-[Environment]::SetEnvironmentVariable
-    ( "C:\Program Files\Git\bin", $env:Path, [System.EnvironmentVariableTarget]::Machine )
+$originalPath=(Get-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment' -Name PATH).Path
+$gitPath=$originalPath+’;C:\Program Files\Git\bin’
+Set-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment' -Name PATH –Value $pythonPath
 
 # Installing openssl
 choco install openssl.light -y
 
 # Installing pywin32
-easy_install http://downloads.sourceforge.net/project/pywin32/pywin32/Build%20219/pywin32-219.win32-py2.7.exe
+# easy_install http://downloads.sourceforge.net/project/pywin32/pywin32/Build%20219/pywin32-219.win32-py2.7.exe
 
 # Installing Microsoft Visual C++ Compiler for Python 2.7
 powershell -Command "(New-Object Net.WebClient).DownloadFile('https://download.microsoft.com/download/7/9/6/796EF2E4-801B-4FC4-AB28-B59FBF6D907B/VCForPython27.msi', 'compiler.msi')"
@@ -72,9 +70,10 @@ New-Item -ItemType Directory -Force -Path C:\Sync
 xcopy /s sync.exe C:\Sync /Y
 
 # Modify system environment variable
-[Environment]::SetEnvironmentVariable
-     ( "C:\Sync", $env:Path, [System.EnvironmentVariableTarget]::Machine )
+$originalPath=(Get-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment' -Name PATH).Path
+$syncPath=$originalPath+’;C:\Sync’
+Set-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment' -Name PATH –Value $syncPath
 
 # Installing freezer-scheduler
-Set-Location -Path C:\Python27\Lib\site-packages\freezer\scheduler
-python win_service.py --username $pc_name --password $plain_password install
+# Set-Location -Path C:\Python27\Lib\site-packages\freezer\scheduler
+# python win_service.py --username $pc_name --password $plain_password install
