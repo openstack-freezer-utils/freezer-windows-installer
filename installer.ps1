@@ -54,7 +54,7 @@ msiexec /i compiler.msi /quiet
 git clone https://github.com/openstack/freezer.git C:\freezer
 Set-Location -Path C:\freezer
 git pull origin master
-pip install -r C:\freezer\requirements.txt
+pip install -r requirements.txt
 python setup.py install
 git clone https://github.com/memogarcia/freezer-windows-binaries C:\Python27\Lib\site-packages\freezer\bin
 
